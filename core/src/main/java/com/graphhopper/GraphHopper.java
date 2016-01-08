@@ -673,7 +673,7 @@ public class GraphHopper implements GraphHopperAPI
     }
 
     /**
-     * Creates the graph from OSM data.
+     * Creates the graph from OSM and GTFS data.
      */
     private GraphHopper process( String graphHopperLocation )
     {

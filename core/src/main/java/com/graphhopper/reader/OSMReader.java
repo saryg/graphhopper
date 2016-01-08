@@ -163,7 +163,8 @@ public class OSMReader implements DataReader
      * Preprocessing of OSM file to select nodes which are used for highways. This allows a more
      * compact graph data structure.
      */
-    void preProcess( File osmFile )
+    @SuppressWarnings("resource")
+	void preProcess( File osmFile )
     {
         OSMInputFile in = null;
         try

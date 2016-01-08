@@ -18,6 +18,8 @@
 package com.graphhopper.util;
 
 import com.graphhopper.util.shapes.BBox;
+import com.graphhopper.util.shapes.GHPoint;
+
 import gnu.trove.list.TIntList;
 import gnu.trove.list.array.TIntArrayList;
 
@@ -46,6 +48,8 @@ import org.slf4j.LoggerFactory;
  */
 public class Helper
 {
+
+	private static final long EARTH_DIAMETER = 12746;
     public static final DistanceCalc DIST_EARTH = new DistanceCalcEarth();
     public static final DistanceCalc3D DIST_3D = new DistanceCalc3D();
     public static final DistancePlaneProjection DIST_PLANE = new DistancePlaneProjection();
@@ -278,7 +282,6 @@ public class Helper
     {
         return str == null || str.trim().length() == 0;
     }
-
     /**
      * Determines if the specified ByteBuffer is one which maps to a file!
      */
@@ -308,6 +311,16 @@ public class Helper
         dist = Math.min(dist / 1000, 50000);
         return Math.max(2000, (int) (dist * dist));
     }
+
+	public static double distance (GHPoint a, GHPoint b) {
+	    double lat = Math.toRadians(b.lat - a.lat) / 2;
+	    double lon = Math.toRadians(b.lon - a.lon) / 2;
+	    double c = Math.sin(lat) * Math.sin(lat) +
+	        Math.cos(Math.toRadians(a.lat)) *
+	        Math.cos(Math.toRadians(b.lat)) *
+	        Math.sin(lon) * Math.sin(lon);
+	    return EARTH_DIAMETER * Math.atan2(Math.sqrt(c), Math.sqrt(1 - c));
+	}
 
     public static String pruneFileEnd( String file )
     {
@@ -509,4 +522,12 @@ public class Helper
         df.setTimeZone(TimeZone.getTimeZone("UTC"));
         return df;
     }
+
+	public static <T> HashSet<T> fillSet(T[] objects) {
+		HashSet<T> set = new HashSet<T>(0);
+		for (T object : objects) {
+			set.add(object);
+		}
+		return set;
+	}
 }
